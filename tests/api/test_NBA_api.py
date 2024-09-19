@@ -1,6 +1,6 @@
 import pytest
 
-from api.NBA_api import get_player_season_stats
+from api.NBA_api import get_players_season_stats
 
 
 # @pytest.fixture(scope="module")
@@ -10,5 +10,5 @@ from api.NBA_api import get_player_season_stats
 
 
 def test_get_player_season_stats():
-    players_stats_2024 = get_player_season_stats(2024)
+    players_stats_2024 = get_players_season_stats(2024)
     assert players_stats_2024

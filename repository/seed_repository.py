@@ -1,3 +1,6 @@
+from repository.database import get_db_connection
+
+
 def is_table_exist(table):
     with get_db_connection() as connection:
         with connection.cursor() as cursor:
@@ -9,4 +12,16 @@ def is_table_exist(table):
                 )
                 """, (table,))
             res = cursor.fetchone()
-    return res.get("exist")
+    return res.get("exists")
+
+
+def is_table_filled(table):
+    with get_db_connection() as connection:
+        with connection.cursor() as cursor:
+            cursor.execute("""
+                SELECT COUNT(*)
+                FROM %s
+                )
+                """, (table,))
+            res = cursor.fetchone()
+    return res.get("count")

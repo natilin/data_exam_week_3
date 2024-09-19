@@ -2,7 +2,7 @@ from dataclasses import dataclass
 
 
 @dataclass
-class PlayerSeasonStats:
+class Player_fantasy_team:
     team_id: int
     PG_player: str
     SG_player: str
