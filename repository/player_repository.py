@@ -27,3 +27,14 @@ def create_player(player: Player):
                       'playerId': player.playerId})
             cursor.fetchone()
             connection.commit()
+
+
+def get_all_players():
+    with get_db_connection() as connection:
+        with connection.cursor() as cursor:
+            cursor.execute("""
+                SELECT * FROM player         
+                """)
+            res = cursor.fetchall()
+
+    return res

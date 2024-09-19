@@ -63,3 +63,27 @@ def get_all_stats():
             res = cursor.fetchall()
 
     return res
+
+
+def get_players_by_pos_and_season(pos, season):
+    with get_db_connection() as connection:
+        with connection.cursor() as cursor:
+            cursor.execute("""
+                SELECT DISTINCT ON (player_id) * FROM player_season_stats 
+                where season = %s and position LIKE %s      
+                """, (season, f"%{pos}%",))
+            res = cursor.fetchall()
+
+    return res
+
+
+def get_players_by_pos(pos):
+    with get_db_connection() as connection:
+        with connection.cursor() as cursor:
+            cursor.execute("""
+                SELECT DISTINCT ON (player_id) * FROM player_season_stats 
+                where position LIKE %s      
+                """, (f"%{pos}%",))
+            res = cursor.fetchall()
+
+    return res
