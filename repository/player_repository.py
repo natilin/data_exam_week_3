@@ -1,3 +1,4 @@
+from model.Player import Player
 from repository.database import get_db_connection
 
 
@@ -6,9 +7,23 @@ def create_player_table():
     cur = conn.cursor()
     cur.execute("""
     CREATE TABLE IF NOT EXISTS player (
-    player_id varchar(20) PRIMARY KEY NOT NULL,
-    player_name VARCHAR(50) NOT NULL
+    playerId varchar(20) PRIMARY KEY NOT NULL,
+    playerName VARCHAR(50) NOT NULL
     )
     """)
     conn.commit()
     cur.close()
+
+
+def create_player(player: Player):
+    with get_db_connection() as connection:
+        with connection.cursor() as cursor:
+            cursor.execute("""
+                INSERT INTO player (playerId, playerName)
+                VALUES ( %(playerId)s, %(playerName)s)
+                ON CONFLICT (playerId) DO NOTHING
+                RETURNING * 
+                """, {'playerName': player.playerName,
+                      'playerId': player.playerId})
+            cursor.fetchone()
+            connection.commit()

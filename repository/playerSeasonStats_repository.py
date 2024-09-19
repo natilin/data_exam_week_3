@@ -1,45 +1,65 @@
+from model.PlayerSeasonStats import PlayerSeasonStats
 from repository.database import get_db_connection
 
 
-def create_player_season_stats_table():
+def create_table():
     conn = get_db_connection()
     cur = conn.cursor()
     cur.execute("""
-    CREATE TABLE IF NOT EXISTS player_season_stats (
-        id INTEGER PRIMARY KEY, 
-        player_name VARCHAR(50) NOT NULL,
-        position VARCHAR(10),
-        age INTEGER,
-        games INTEGER,
-        games_started INTEGER,
-        minutes_per_game FLOAT,
-        field_goals INTEGER,
-        field_attempts INTEGER,
+        CREATE TABLE IF NOT EXISTS player_season_stats (
+        id  int PRIMARY KEY,
+        player_name VARCHAR(100),
+        player_id varchar(20),
+        position VARCHAR(50),
+        age INT,
+        games INT,
+        field_goals INT,
+        field_attempts INT,
         field_percent FLOAT,
-        three_fg INTEGER,
-        three_attempts INTEGER,
         three_percent FLOAT,
-        two_fg INTEGER,
-        two_attempts INTEGER,
         two_percent FLOAT,
-        effective_fg_percent FLOAT,
-        free_throws INTEGER,
-        free_throw_attempts INTEGER,
-        free_throw_percent FLOAT,
-        offensive_rebounds INTEGER,
-        defensive_rebounds INTEGER,
-        total_rebounds INTEGER,
-        assists INTEGER,
-        steals INTEGER,
-        blocks INTEGER,
-        turnovers INTEGER,
-        personal_fouls INTEGER,
-        points INTEGER,
+        assists INT,
+        turnovers INT,
+        points INT,
         team VARCHAR(10),
-        season INTEGER NOT NULL,
-        player_id VARCHAR(20) NOT NULL
-    )
+        season INT
+                )
+
     """)
 
     conn.commit()
     cur.close()
+
+
+def create_player_season_stats(player: PlayerSeasonStats):
+    with get_db_connection() as connection:
+        with connection.cursor() as cursor:
+            cursor.execute("""
+                INSERT INTO player_season_stats ( id,
+                player_name, player_id, position, age, games, field_goals, field_attempts, field_percent, 
+                three_percent, two_percent, assists, turnovers, points, team, season
+            ) 
+
+                 VALUES (%s,%s, %s, %s, %s, %s, %s,
+                  %s, %s, %s, %s, %s, %s, %s, %s, %s)
+                ON CONFLICT (id) DO NOTHING
+                RETURNING * 
+            """, (
+                player.id, player.player_name, player.player_id, player.position, player.age, player.games, player.field_goals,
+                player.field_attempts, player.field_percent, player.three_percent, player.two_percent,
+                player.assists, player.turnovers, player.points, player.team, player.season))
+            res = cursor.fetchone()
+            connection.commit()
+
+    return res
+
+
+def get_all_stats():
+    with get_db_connection() as connection:
+        with connection.cursor() as cursor:
+            cursor.execute("""
+                SELECT * FROM player_season_stats         
+                """)
+            res = cursor.fetchall()
+
+    return res

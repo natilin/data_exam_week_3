@@ -18,10 +18,9 @@ def is_table_exist(table):
 def is_table_filled(table):
     with get_db_connection() as connection:
         with connection.cursor() as cursor:
-            cursor.execute("""
+            cursor.execute(f"""
                 SELECT COUNT(*)
-                FROM %s
-                )
-                """, (table,))
+                FROM {table}
+                """)
             res = cursor.fetchone()
     return res.get("count")
