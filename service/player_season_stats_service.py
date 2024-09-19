@@ -39,3 +39,11 @@ def get_all_stats():
     return [PlayerSeasonStats(**stats) for stats in stats_list]
 
 
+def get_players_by_pos(pos):
+    stats_list = playerSeasonStats_repository.get_players_by_pos(pos)
+    return [PlayerSeasonStats(**stats) for stats in stats_list]
+
+
+def get_players_by_pos_and_season(pos, season):
+    stats_list = playerSeasonStats_repository.get_players_by_pos_and_season(pos, season)
+    return [PlayerSeasonStats(**stats) for stats in stats_list]
