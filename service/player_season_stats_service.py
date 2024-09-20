@@ -47,3 +47,9 @@ def get_players_by_pos(pos):
 def get_players_by_pos_and_season(pos, season):
     stats_list = playerSeasonStats_repository.get_players_by_pos_and_season(pos, season)
     return [PlayerSeasonStats(**stats) for stats in stats_list]
+
+
+def get_player_stats_by_id(player_id):
+    player = playerSeasonStats_repository.get_player_stats_by_id(player_id)
+    return PlayerSeasonStats(**player) if player else None
+

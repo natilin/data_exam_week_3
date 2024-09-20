@@ -7,7 +7,7 @@ class Player_DTO:
     playerName: str
     team: str
     position: str
-    season: List[int]
+    season: int
     point: int
     games: int
     twoPercen: float

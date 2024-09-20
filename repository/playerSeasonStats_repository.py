@@ -65,6 +65,17 @@ def get_all_stats():
     return res
 
 
+def get_player_stats_by_id(player_id):
+    with get_db_connection() as connection:
+        with connection.cursor() as cursor:
+            cursor.execute(f"""
+                SELECT * FROM player_season_stats 
+                where player_id = %s   
+                """, (player_id,))
+            res = cursor.fetchone()
+
+    return res
+
 def get_players_by_pos_and_season(pos, season):
     with get_db_connection() as connection:
         with connection.cursor() as cursor:
@@ -87,3 +98,27 @@ def get_players_by_pos(pos):
             res = cursor.fetchall()
 
     return res
+
+
+def get_sum_player_assist(player_id):
+    with get_db_connection() as connection:
+        with connection.cursor() as cursor:
+            cursor.execute(f"""
+                SELECT SUM(assists) FROM player_season_stats 
+                where player_id = %s   
+                """, (player_id,))
+            res = cursor.fetchone()
+
+    return res.get("sum")
+
+
+def get_sum_player_turnovers(player_id):
+    with get_db_connection() as connection:
+        with connection.cursor() as cursor:
+            cursor.execute(f"""
+                SELECT SUM(turnovers) FROM player_season_stats 
+                where player_id = %s   
+                """, (player_id,))
+            res = cursor.fetchone()
+
+    return res.get("sum")
