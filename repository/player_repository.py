@@ -38,3 +38,5 @@ def get_all_players():
             res = cursor.fetchall()
 
     return res
+
+

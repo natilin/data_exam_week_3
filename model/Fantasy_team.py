@@ -2,10 +2,11 @@ from dataclasses import dataclass
 
 
 @dataclass
-class Player_fantasy_team:
-    team_id: int
+class Fantasy_team:
+    team_name: str
     PG_player: str
     SG_player: str
     SF_player: str
     PF_player: str
     C_player: str
+    team_id: int = None
